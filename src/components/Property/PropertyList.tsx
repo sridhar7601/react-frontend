@@ -1,13 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import { fetchProperties } from '../../services/api';
 import PropertyItem from './PropertyItem';
 import { useNavigate } from 'react-router-dom';
 
+interface Property {
+  _id: string;
+  state: string;
+  city: string;
+  area: string;
+  bedrooms: number;
+  bathrooms: number;
+  furnished: boolean;
+  petsAllowed: boolean;
+  cost: number;
+}
+
 const PropertyList = () => {
   const navigate = useNavigate();
 
-  const [properties, setProperties] = useState([]);
-  const [filteredProperties, setFilteredProperties] = useState([]);
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
   const [filters, setFilters] = useState({
     state: '',
     city: '',
@@ -21,10 +33,8 @@ const PropertyList = () => {
 
   const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-  // Check if the user is a seller, if yes, redirect them
   useEffect(() => {
     if (user.userType === 'seller') {
-      // Redirect the seller to the MyProperties page
       return navigate("/my-properties")
     }
   }, [user.userType]);
@@ -46,12 +56,12 @@ const PropertyList = () => {
     applyFilters();
   }, [filters]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFilters({ ...filters, [name]: value });
   };
 
-  const handleCheckboxChange = (e) => {
+  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
     setFilters({ ...filters, [name]: checked });
   };
@@ -81,7 +91,7 @@ const PropertyList = () => {
       filtered = filtered.filter((property) => property.petsAllowed === filters.petsAllowed);
     }
     if (filters.cost) {
-      filtered = filtered.filter((property) => property.cost <= filters.cost);
+      filtered = filtered.filter((property) => property.cost <= parseFloat(filters.cost));
     }
 
     setFilteredProperties(filtered);

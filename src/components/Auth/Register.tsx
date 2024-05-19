@@ -1,4 +1,3 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { register as registerUser } from '../../services/api';
@@ -17,7 +16,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <form onSubmit={handleSubmit(onSubmit)} className="p-6 bg-white rounded shadow-md w-full max-w-md">
         <h2 className="mb-4 text-xl font-bold">Register</h2>
         <div className="mb-4">
@@ -27,7 +26,7 @@ const Register = () => {
             placeholder="First Name"
             className="w-full p-2 border rounded"
           />
-          {errors.firstName && <p className="text-red-500">{errors.firstName.message}</p>}
+          {errors.firstName && <p className="text-red-500">{errors.firstName.message as string}</p>}
         </div>
         <div className="mb-4">
           <input
@@ -36,7 +35,7 @@ const Register = () => {
             placeholder="Last Name"
             className="w-full p-2 border rounded"
           />
-          {errors.lastName && <p className="text-red-500">{errors.lastName.message}</p>}
+          {errors.lastName && <p className="text-red-500">{errors.lastName.message as string}</p>}
         </div>
         <div className="mb-4">
           <input
@@ -45,7 +44,7 @@ const Register = () => {
             placeholder="Email"
             className="w-full p-2 border rounded"
           />
-          {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+          {errors.email && <p className="text-red-500">{errors.email.message as string}</p>}
         </div>
         <div className="mb-4">
           <input
@@ -54,7 +53,7 @@ const Register = () => {
             placeholder="Phone Number"
             className="w-full p-2 border rounded"
           />
-          {errors.phoneNumber && <p className="text-red-500">{errors.phoneNumber.message}</p>}
+          {errors.phoneNumber && <p className="text-red-500">{errors.phoneNumber.message as string}</p>}
         </div>
         <div className="mb-4">
           <input
@@ -63,7 +62,7 @@ const Register = () => {
             placeholder="Password"
             className="w-full p-2 border rounded"
           />
-          {errors.password && <p className="text-red-500">{errors.password.message}</p>}
+          {errors.password && <p className="text-red-500">{errors.password.message as string}</p>}
         </div>
         <div className="mb-4">
           <select
@@ -74,10 +73,15 @@ const Register = () => {
             <option value="seller">Seller</option>
             <option value="buyer">Buyer</option>
           </select>
-          {errors.userType && <p className="text-red-500">{errors.userType.message}</p>}
+          {errors.userType && <p className="text-red-500">{errors.userType.message as string}</p>}
         </div>
-        <button type="submit" className="w-full py-2 bg-blue-500 rounded text-white">Register</button>
+        <button type="submit" className="w-full py-2 bg-blue-500 rounded text-white">
+          Register
+        </button>
       </form>
+      <p className="text-sm text-gray-500 mt-4">
+        Have an account? <a href="/login" className="text-blue-500">Login</a>
+      </p>
     </div>
   );
 };

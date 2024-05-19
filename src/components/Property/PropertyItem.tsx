@@ -1,16 +1,25 @@
-import React from 'react';
+import { useState } from 'react';
+// import axios from 'axios';
+import { updateLikeCount } from '../../services/api';
 
-const PropertyItem = ({
-  property,
-  onEdit,
-  onDelete,
-  showButtons,
-}: {
-  property: any;
-  onEdit?: (property: any) => void;
-  onDelete?: (id: string) => void;
-  showButtons?: boolean;
-}) => {
+
+const PropertyItem = ({ property, onEdit, onDelete, showButtons }: { property: any; onEdit?: (property: any) => void; onDelete?: (id: string) => void; showButtons?: boolean }) => {
+  const [showEmail, setShowEmail] = useState(false);
+  const [likes, setLikes] = useState(property.likes || 0);
+  const toggleEmail = () => {
+    setShowEmail((prev) => !prev);
+  };
+
+  const handleLike = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await updateLikeCount(property._id, true, token || undefined);
+      setLikes(response.data.likes);
+    } catch (error) {
+      console.error('Error liking property:', error);
+    }
+  };
+
   return (
     <div className="p-4 bg-white rounded shadow-md">
       <h3 className="text-lg font-bold">
@@ -20,9 +29,23 @@ const PropertyItem = ({
       <p>{property.bedrooms} Bedrooms</p>
       <p>{property.bathrooms} Bathrooms</p>
       <p>Cost: ${property.cost}</p>
-      <p>{property.furnished ? "Furnished" : "Not Furnished"}</p>
-      <p>{property.petsAllowed ? "Pets Allowed" : "No Pets Allowed"}</p>
+      <p>{property.furnished ? 'Furnished' : 'Not Furnished'}</p>
+      <p>{property.petsAllowed ? 'Pets Allowed' : 'No Pets Allowed'}</p>
       <p>{property.description}</p>
+
+      {showEmail && <p>{property.seller.email}</p>}
+      
+     {!showButtons && <button onClick={toggleEmail} className="text-blue-500">
+        {showEmail ? 'Hide Email' : 'Show Email'}
+      </button>}
+
+      <div>
+        <button onClick={handleLike} className="text-blue-500">
+          Like
+        </button>
+        <span>{likes} Likes</span>
+      </div>
+
       {showButtons && (
         <div className="mt-4">
           <button

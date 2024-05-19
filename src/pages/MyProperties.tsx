@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchMyProperties, deleteProperty } from '../services/api';
 import PropertyItem from '../components/Property/PropertyItem';
 import PropertyForm from '../components/Property/PropertyForm';
@@ -66,8 +66,13 @@ const MyProperties = () => {
       <h1 className="mb-4 text-2xl font-bold">My Properties</h1>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {properties.map((property) => (
-          <PropertyItem key={property._id} property={property} onEdit={handleEdit} onDelete={handleDelete} showButtons={true} />
-        ))}
+          <PropertyItem
+  key={property?._id || ''}
+  property={property}
+  onEdit={handleEdit}
+  onDelete={handleDelete}
+  showButtons={true}
+/>        ))}
       </div>
       {editingProperty && (
         <div className="mt-4">

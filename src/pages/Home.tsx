@@ -1,5 +1,4 @@
 // src/pages/Home.tsx
-import React from 'react';
 import PropertyList from '../components/Property/PropertyList';
 
 const Home = () => {
