@@ -21,7 +21,6 @@ const PropertyForm = ({ property, onSubmit }: { property?: any, onSubmit: () => 
   const navigate = useNavigate();
   useEffect(() => {
     if (user.userType === 'buyer') {
-      // Redirect the seller to the MyProperties page
       return navigate("/properties")
     }
   }, [user.userType]);

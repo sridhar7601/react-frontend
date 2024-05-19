@@ -3,29 +3,21 @@ import { fetchMyProperties, deleteProperty } from '../services/api';
 import PropertyItem from '../components/Property/PropertyItem';
 import PropertyForm from '../components/Property/PropertyForm';
 import { useNavigate } from 'react-router-dom';
-interface Property {
-  _id: string;
-  // Add other property fields here
-}
+
 const MyProperties = () => {
   const navigate = useNavigate();
-
-  const [properties, setProperties] = useState([]);
-  const [editingProperty, setEditingProperty] = useState(null);
+  const [properties, setProperties] = useState<{ _id: string; [key: string]: any }[]>([]);
+  const [editingProperty, setEditingProperty] = useState<{ _id: string; [key: string]: any } | null>(null);
   const user = JSON.parse(localStorage.getItem('user') || '{}');
- 
-  // Check if the user is a seller, if yes, redirect them
+
   useEffect(() => {
     if (user.userType === 'buyer') {
-      // Redirect the seller to another page
-      // In this example, let's redirect them to the properties listing page
-      return navigate("/properties")
+      
+      return navigate("/properties");
     }
   }, [user.userType]);
 
-
   useEffect(() => {
-    
     const getProperties = async () => {
       try {
         const response = await fetchMyProperties(user._id);
@@ -37,14 +29,14 @@ const MyProperties = () => {
     getProperties();
   }, [user._id]);
 
-  const handleEdit = (property: any) => {
+  const handleEdit = (property: { _id: string; [key: string]: any }) => {
     setEditingProperty(property);
   };
 
   const handleDelete = async (id: string) => {
     try {
       await deleteProperty(id);
-      setProperties(properties.filter((property: any) => property._id !== id));
+      setProperties(properties.filter((property) => property._id !== id));
     } catch (error) {
       console.error(error);
     }
@@ -52,7 +44,6 @@ const MyProperties = () => {
 
   const handleFormSubmit = () => {
     setEditingProperty(null);
-    // Fetch the updated properties after adding or editing
     const fetchUpdatedProperties = async () => {
       try {
         const response = await fetchMyProperties(user._id);
@@ -70,12 +61,13 @@ const MyProperties = () => {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {properties.map((property) => (
           <PropertyItem
-  key={property?._id || ''}
-  property={property}
-  onEdit={handleEdit}
-  onDelete={handleDelete}
-  showButtons={true}
-/>        ))}
+            key={property._id}
+            property={property}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            showButtons={true}
+          />
+        ))}
       </div>
       {editingProperty && (
         <div className="mt-4">

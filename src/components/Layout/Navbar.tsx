@@ -11,7 +11,6 @@ const Navbar = () => {
     navigate('/login');
   };
 
-  // Don't render the navbar on the login page
   if (location.pathname === '/login' || location.pathname === '/register') {
     return null;
   }
