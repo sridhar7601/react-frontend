@@ -3,7 +3,10 @@ import { fetchMyProperties, deleteProperty } from '../services/api';
 import PropertyItem from '../components/Property/PropertyItem';
 import PropertyForm from '../components/Property/PropertyForm';
 import { useNavigate } from 'react-router-dom';
-
+interface Property {
+  _id: string;
+  // Add other property fields here
+}
 const MyProperties = () => {
   const navigate = useNavigate();
 
