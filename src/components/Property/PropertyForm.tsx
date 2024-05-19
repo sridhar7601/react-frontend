@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { addProperty, updateProperty } from '../../services/api';
+import { useNavigate } from 'react-router-dom';
 
 const PropertyForm = ({ property, onSubmit }: { property?: any, onSubmit: () => void }) => {
   const { register, handleSubmit, reset } = useForm({
@@ -17,6 +18,13 @@ const PropertyForm = ({ property, onSubmit }: { property?: any, onSubmit: () => 
     }
   });
   const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (user.userType === 'buyer') {
+      // Redirect the seller to the MyProperties page
+      return navigate("/properties")
+    }
+  }, [user.userType]);
 
   useEffect(() => {
     if (property) {
@@ -30,9 +38,12 @@ const PropertyForm = ({ property, onSubmit }: { property?: any, onSubmit: () => 
       if (property) {
         await updateProperty(property._id, data);
         alert('Property updated successfully');
+        navigate('/my-properties');
+
       } else {
         await addProperty(data);
         alert('Property added successfully');
+        navigate('/my-properties');
       }
       onSubmit();
     } catch (error) {

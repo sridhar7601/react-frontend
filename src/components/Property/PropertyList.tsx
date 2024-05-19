@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { fetchProperties, } from '../../services/api';
+import { fetchProperties } from '../../services/api';
 import PropertyItem from './PropertyItem';
-// import { updateLikeCount } from '../../services/api';
+import { useNavigate } from 'react-router-dom';
 
 const PropertyList = () => {
+  const navigate = useNavigate();
+
   const [properties, setProperties] = useState([]);
   const [filteredProperties, setFilteredProperties] = useState([]);
   const [filters, setFilters] = useState({
@@ -16,6 +18,16 @@ const PropertyList = () => {
     petsAllowed: false,
     cost: '',
   });
+
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+  // Check if the user is a seller, if yes, redirect them
+  useEffect(() => {
+    if (user.userType === 'seller') {
+      // Redirect the seller to the MyProperties page
+      return navigate("/my-properties")
+    }
+  }, [user.userType]);
 
   useEffect(() => {
     const getProperties = async () => {

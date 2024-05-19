@@ -2,13 +2,25 @@ import React, { useEffect, useState } from 'react';
 import { fetchMyProperties, deleteProperty } from '../services/api';
 import PropertyItem from '../components/Property/PropertyItem';
 import PropertyForm from '../components/Property/PropertyForm';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const MyProperties = () => {
+  const navigate = useNavigate();
+
   const [properties, setProperties] = useState([]);
   const [editingProperty, setEditingProperty] = useState(null);
   const user = JSON.parse(localStorage.getItem('user') || '{}');
  
+  // Check if the user is a seller, if yes, redirect them
+  useEffect(() => {
+    if (user.userType === 'buyer') {
+      // Redirect the seller to another page
+      // In this example, let's redirect them to the properties listing page
+      return navigate("/properties")
+    }
+  }, [user.userType]);
+
+
   useEffect(() => {
     
     const getProperties = async () => {
