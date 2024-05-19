@@ -21,7 +21,7 @@ const PropertyForm = ({ property, onSubmit }: { property?: any, onSubmit: () => 
   const navigate = useNavigate();
   useEffect(() => {
     if (user.userType === 'buyer') {
-      return navigate("/properties")
+      return navigate("https://react-frontend-e23w.vercel.app/properties")
     }
   }, [user.userType]);
 
@@ -37,7 +37,7 @@ const PropertyForm = ({ property, onSubmit }: { property?: any, onSubmit: () => 
       if (property) {
         await updateProperty(property._id, data);
         alert('Property updated successfully');
-        navigate('/my-properties');
+        navigate('https://react-frontend-e23w.vercel.app/my-properties');
 
       } else {
         await addProperty(data);

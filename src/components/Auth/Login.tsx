@@ -13,9 +13,9 @@ const Login = () => {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       if (response.data.user.userType === 'seller') {
-        navigate('/my-properties');
+        navigate('https://react-frontend-e23w.vercel.app/my-properties');
       } else {
-        navigate('/properties');
+        navigate('https://react-frontend-e23w.vercel.app/properties');
       }
     } catch (error) {
       console.error(error);
