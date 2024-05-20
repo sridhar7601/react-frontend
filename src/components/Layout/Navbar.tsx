@@ -23,6 +23,9 @@ const Navbar = () => {
         {user.userType === 'seller' && <Link to="/my-properties" className="mr-4">My Properties</Link>}
         {user.userType === 'seller' && <Link to="/add-property" className="mr-4">Add Property</Link>}
       </div>
+      {user && user.userType && (
+            <span className="mr-4">{`${user.userType.charAt(0).toUpperCase() + user.userType.slice(1)} - ${user.firstName} ${user.lastName}`}</span>
+          )}
       <button onClick={handleLogout} className="bg-red-500 rounded px-4 py-2">Logout</button>
     </nav>
   );

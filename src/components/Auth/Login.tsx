@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../services/api';
+  import { toast } from 'react-toastify';
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors }, setError } = useForm();
@@ -16,8 +17,10 @@ const Login = () => {
       } else {
         navigate('/properties');
       }
+      toast.success('Login successful!');
     } catch (error: any) {
-      console.error(error);
+      toast.error('Failed to login.');
+      // console.error(error);
       if (error.response && error.response.data && error.response.data.message) {
         setError('apiError', { message: error.response.data.message });
       } else {

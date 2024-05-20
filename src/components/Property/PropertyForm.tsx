@@ -2,9 +2,10 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { addProperty, updateProperty } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const PropertyForm = ({ property, onSubmit }: { property?: any, onSubmit: () => void }) => {
-  const { register, handleSubmit, reset } = useForm({
+  const { register, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: property || {
       state: '',
       city: '',
@@ -19,9 +20,10 @@ const PropertyForm = ({ property, onSubmit }: { property?: any, onSubmit: () => 
   });
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const navigate = useNavigate();
+  
   useEffect(() => {
     if (user.userType === 'buyer') {
-      return navigate("/properties")
+      return navigate("/properties");
     }
   }, [user.userType]);
 
@@ -36,37 +38,111 @@ const PropertyForm = ({ property, onSubmit }: { property?: any, onSubmit: () => 
       data.userId = user._id;
       if (property) {
         await updateProperty(property._id, data);
-        alert('Property updated successfully');
+        toast.success('Property updated successfully');
         navigate('/my-properties');
-
       } else {
         await addProperty(data);
-        alert('Property added successfully');
+        toast.success('Property added successfully');
         navigate('/my-properties');
       }
       onSubmit();
     } catch (error) {
-      console.error(error);
+      toast.error('Failed to add/update property');
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form onSubmit={handleSubmit(submitHandler)} className="p-6 bg-white rounded shadow-md">
+      <form onSubmit={handleSubmit(submitHandler)} className="p-6 bg-white rounded shadow-md w-full max-w-md">
         <h2 className="mb-4 text-xl font-bold">{property ? 'Edit Property' : 'Add Property'}</h2>
-        <input type="text" {...register('state')} placeholder="State" className="w-full p-2 mb-4 border rounded" />
-        <input type="text" {...register('city')} placeholder="City" className="w-full p-2 mb-4 border rounded" />
-        <input type="text" {...register('area')} placeholder="Area" className="w-full p-2 mb-4 border rounded" />
-        <input type="number" {...register('bedrooms')} placeholder="Bedrooms" className="w-full p-2 mb-4 border rounded" />
-        <input type="number" {...register('bathrooms')} placeholder="Bathrooms" className="w-full p-2 mb-4 border rounded" />
+        
         <div className="mb-4">
-          <input type="checkbox" {...register('furnished')} className="mr-2" /> Furnished
+          <input 
+            type="text" 
+            {...register('state', { required: 'State is required' })} 
+            placeholder="State" 
+            className="w-full p-2 mb-1 border rounded" 
+          />
+          {errors.state && <p className="text-red-500 text-sm">{errors.state.message}</p>}
         </div>
-        <textarea {...register('description')} placeholder="Description" className="w-full p-2 mb-4 border rounded"></textarea>
-        <input type="number" {...register('cost')} placeholder="Cost" className="w-full p-2 mb-4 border rounded" />
+        
         <div className="mb-4">
-          <input type="checkbox" {...register('petsAllowed')} className="mr-2" /> Pets Allowed
+          <input 
+            type="text" 
+            {...register('city', { required: 'City is required' })} 
+            placeholder="City" 
+            className="w-full p-2 mb-1 border rounded" 
+          />
+          {errors.city && <p className="text-red-500 text-sm">{errors.city.message}</p>}
         </div>
+        
+        <div className="mb-4">
+          <input 
+            type="text" 
+            {...register('area', { required: 'Area is required' })} 
+            placeholder="Area" 
+            className="w-full p-2 mb-1 border rounded" 
+          />
+          {errors.area && <p className="text-red-500 text-sm">{errors.area.message}</p>}
+        </div>
+        
+        <div className="mb-4">
+          <input 
+            type="number" 
+            {...register('bedrooms', { required: 'Number of bedrooms is required', min: { value: 1, message: 'At least 1 bedroom is required' } })} 
+            placeholder="Bedrooms" 
+            className="w-full p-2 mb-1 border rounded" 
+          />
+          {errors.bedrooms && <p className="text-red-500 text-sm">{errors.bedrooms.message}</p>}
+        </div>
+        
+        <div className="mb-4">
+          <input 
+            type="number" 
+            {...register('bathrooms', { required: 'Number of bathrooms is required', min: { value: 1, message: 'At least 1 bathroom is required' } })} 
+            placeholder="Bathrooms" 
+            className="w-full p-2 mb-1 border rounded" 
+          />
+          {errors.bathrooms && <p className="text-red-500 text-sm">{errors.bathrooms.message}</p>}
+        </div>
+        
+        <div className="mb-4">
+          <input 
+            type="checkbox" 
+            {...register('furnished')} 
+            className="mr-2" 
+          /> 
+          Furnished
+        </div>
+        
+        <div className="mb-4">
+          <textarea 
+            {...register('description', { required: 'Description is required' })} 
+            placeholder="Description" 
+            className="w-full p-2 mb-1 border rounded"
+          ></textarea>
+          {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
+        </div>
+        
+        <div className="mb-4">
+          <input 
+            type="number" 
+            {...register('cost', { required: 'Cost is required', min: { value: 0, message: 'Cost must be a positive number' } })} 
+            placeholder="Cost" 
+            className="w-full p-2 mb-1 border rounded" 
+          />
+          {errors.cost && <p className="text-red-500 text-sm">{errors.cost.message}</p>}
+        </div>
+        
+        <div className="mb-4">
+          <input 
+            type="checkbox" 
+            {...register('petsAllowed')} 
+            className="mr-2" 
+          /> 
+          Pets Allowed
+        </div>
+        
         <button type="submit" className="w-full py-2 bg-blue-500 rounded text-white">
           {property ? 'Update Property' : 'Add Property'}
         </button>

@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 // import axios from 'axios';
 import { updateLikeCount } from '../../services/api';
+import io from 'socket.io-client';
 
+const socket = io('http://localhost:5050');
 
 const PropertyItem = ({ property, onEdit, onDelete, showButtons }: { property: any; onEdit?: (property: any) => void; onDelete?: (id: string) => void; showButtons?: boolean }) => {
   const [showEmail, setShowEmail] = useState(false);
@@ -9,7 +11,18 @@ const PropertyItem = ({ property, onEdit, onDelete, showButtons }: { property: a
   const toggleEmail = () => {
     setShowEmail((prev) => !prev);
   };
+  useEffect(() => {
+    // Listen for updates to likes
+    socket.on('updateLikes', (data) => {
+      if (data.propertyId === property._id) {
+        setLikes(data.likes);
+      }
+    });
 
+    return () => {
+      socket.off('updateLikes');
+    };
+  }, [property._id]);
   const handleLike = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -37,12 +50,14 @@ const PropertyItem = ({ property, onEdit, onDelete, showButtons }: { property: a
       
      {!showButtons && <button onClick={toggleEmail} className="text-blue-500">
         {showEmail ? 'Hide Email' : 'Show Email'}
-      </button>}
+      </button>
+      }
 
       <div>
+        {!showButtons &&
         <button onClick={handleLike} className="text-blue-500">
-          Like
-        </button>
+          Like &nbsp;
+        </button>}
         <span>{likes} Likes</span>
       </div>
 
