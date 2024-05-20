@@ -80,7 +80,7 @@ const Register = () => {
           </select>
           {errors.userType && <p className="text-red-500">{errors.userType.message as string}</p>}
         </div>
-        {errors.apiError && <p className="text-red-500">{errors.apiError.message}</p>}
+        {errors.apiError && <p className="text-red-500">{(errors.apiError.message as string)}</p>}
         <button type="submit" className="w-full py-2 bg-blue-500 rounded text-white">
           Register
         </button>

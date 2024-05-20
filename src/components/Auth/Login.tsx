@@ -34,7 +34,7 @@ const Login = () => {
         {errors.email && <p className="text-red-500">{errors.email.message as string}</p>}
         <input type="password" {...register('password', { required: 'Password is required' })} placeholder="Password" className="w-full p-2 mb-4 border rounded" />
         {errors.password && <p className="text-red-500">{errors.password.message as string}</p>}
-        {errors.apiError && <p className="text-red-500">{errors.apiError.message}</p>}
+        {errors.apiError && <p className="text-red-500">{(errors.apiError.message as string)}</p>}
         <button type="submit" className="w-full py-2 bg-blue-500 rounded text-white">Login</button>
       </form>
       <p className="text-sm text-gray-500 mt-4">Don't have an account? <a href="/register" className="text-blue-500">Register</a></p>
