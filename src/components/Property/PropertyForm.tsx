@@ -63,7 +63,7 @@ const PropertyForm = ({ property, onSubmit }: { property?: any, onSubmit: () => 
             placeholder="State" 
             className="w-full p-2 mb-1 border rounded" 
           />
-          {errors.state && <p className="text-red-500 text-sm">{errors.state.message}</p>}
+          {errors.state?.message && <p className="text-red-500 text-sm">{String(errors.state.message)}</p>}
         </div>
         
         <div className="mb-4">
@@ -73,7 +73,7 @@ const PropertyForm = ({ property, onSubmit }: { property?: any, onSubmit: () => 
             placeholder="City" 
             className="w-full p-2 mb-1 border rounded" 
           />
-          {errors.city && <p className="text-red-500 text-sm">{errors.city.message}</p>}
+          {errors.city?.message && <p className="text-red-500 text-sm">{String(errors.city.message)}</p>}
         </div>
         
         <div className="mb-4">
@@ -83,7 +83,7 @@ const PropertyForm = ({ property, onSubmit }: { property?: any, onSubmit: () => 
             placeholder="Area" 
             className="w-full p-2 mb-1 border rounded" 
           />
-          {errors.area && <p className="text-red-500 text-sm">{errors.area.message}</p>}
+          {errors.area?.message && <p className="text-red-500 text-sm">{String(errors.area.message)}</p>}
         </div>
         
         <div className="mb-4">
@@ -93,7 +93,7 @@ const PropertyForm = ({ property, onSubmit }: { property?: any, onSubmit: () => 
             placeholder="Bedrooms" 
             className="w-full p-2 mb-1 border rounded" 
           />
-          {errors.bedrooms && <p className="text-red-500 text-sm">{errors.bedrooms.message}</p>}
+          {errors.bedrooms?.message && <p className="text-red-500 text-sm">{String(errors.bedrooms.message)}</p>}
         </div>
         
         <div className="mb-4">
@@ -103,7 +103,7 @@ const PropertyForm = ({ property, onSubmit }: { property?: any, onSubmit: () => 
             placeholder="Bathrooms" 
             className="w-full p-2 mb-1 border rounded" 
           />
-          {errors.bathrooms && <p className="text-red-500 text-sm">{errors.bathrooms.message}</p>}
+          {errors.bathrooms?.message && <p className="text-red-500 text-sm">{String(errors.bathrooms.message)}</p>}
         </div>
         
         <div className="mb-4">
@@ -121,17 +121,17 @@ const PropertyForm = ({ property, onSubmit }: { property?: any, onSubmit: () => 
             placeholder="Description" 
             className="w-full p-2 mb-1 border rounded"
           ></textarea>
-          {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
+          {errors.description?.message && <p className="text-red-500 text-sm">{String(errors.description.message)}</p>}
         </div>
         
         <div className="mb-4">
           <input 
             type="number" 
-            {...register('cost', { required: 'Cost is required', min: { value: 0, message: 'Cost must be a positive number' } })} 
+            {...register('cost', { required: 'Cost is required', min: { value: 1, message: 'Cost must be at least 1' } })} 
             placeholder="Cost" 
             className="w-full p-2 mb-1 border rounded" 
           />
-          {errors.cost && <p className="text-red-500 text-sm">{errors.cost.message}</p>}
+          {errors.cost?.message && <p className="text-red-500 text-sm">{String(errors.cost.message)}</p>}
         </div>
         
         <div className="mb-4">
@@ -143,9 +143,7 @@ const PropertyForm = ({ property, onSubmit }: { property?: any, onSubmit: () => 
           Pets Allowed
         </div>
         
-        <button type="submit" className="w-full py-2 bg-blue-500 rounded text-white">
-          {property ? 'Update Property' : 'Add Property'}
-        </button>
+        <button type="submit" className="w-full py-2 bg-blue-500 rounded text-white">{property ? 'Update' : 'Add'} Property</button>
       </form>
     </div>
   );

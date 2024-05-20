@@ -1,4 +1,3 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { register as registerUser } from '../../services/api';
@@ -30,7 +29,7 @@ const Register = () => {
             placeholder="First Name"
             className="w-full p-2 border rounded"
           />
-          {errors.firstName && <p className="text-red-500">{errors.firstName.message}</p>}
+          {errors.firstName?.message && <p className="text-red-500">{String(errors.firstName.message)}</p>}
         </div>
         <div className="mb-4">
           <input
@@ -39,7 +38,7 @@ const Register = () => {
             placeholder="Last Name"
             className="w-full p-2 border rounded"
           />
-          {errors.lastName && <p className="text-red-500">{errors.lastName.message}</p>}
+          {errors.lastName?.message && <p className="text-red-500">{String(errors.lastName.message)}</p>}
         </div>
         <div className="mb-4">
           <input
@@ -48,7 +47,7 @@ const Register = () => {
             placeholder="Email"
             className="w-full p-2 border rounded"
           />
-          {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+          {errors.email?.message && <p className="text-red-500">{String(errors.email.message)}</p>}
         </div>
         <div className="mb-4">
           <input
@@ -57,7 +56,7 @@ const Register = () => {
             placeholder="Phone Number"
             className="w-full p-2 border rounded"
           />
-          {errors.phoneNumber && <p className="text-red-500">{errors.phoneNumber.message}</p>}
+          {errors.phoneNumber?.message && <p className="text-red-500">{String(errors.phoneNumber.message)}</p>}
         </div>
         <div className="mb-4">
           <input
@@ -66,7 +65,7 @@ const Register = () => {
             placeholder="Password"
             className="w-full p-2 border rounded"
           />
-          {errors.password && <p className="text-red-500">{errors.password.message}</p>}
+          {errors.password?.message && <p className="text-red-500">{String(errors.password.message)}</p>}
         </div>
         <div className="mb-4">
           <select
@@ -77,7 +76,7 @@ const Register = () => {
             <option value="buyer">Buyer</option>
             <option value="seller">Seller</option>
           </select>
-          {errors.userType && <p className="text-red-500">{errors.userType.message}</p>}
+          {errors.userType?.message && <p className="text-red-500">{String(errors.userType.message)}</p>}
         </div>
         <button type="submit" className="w-full py-2 bg-blue-500 rounded text-white">Register</button>
       </form>

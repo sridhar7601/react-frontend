@@ -2,6 +2,8 @@ import { useEffect, useState, ChangeEvent } from 'react';
 import { fetchProperties } from '../../services/api';
 import PropertyItem from './PropertyItem';
 import { useNavigate } from 'react-router-dom';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 interface Property {
   _id: string;
@@ -30,14 +32,15 @@ const PropertyList = () => {
     petsAllowed: false,
     cost: '',
   });
+  const [loading, setLoading] = useState(true);
 
   const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   useEffect(() => {
     if (user.userType === 'seller') {
-      return navigate("/my-properties")
+      navigate("/my-properties");
     }
-  }, [user.userType]);
+  }, [user.userType, navigate]);
 
   useEffect(() => {
     const getProperties = async () => {
@@ -45,8 +48,10 @@ const PropertyList = () => {
         const response = await fetchProperties();
         setProperties(response.data);
         setFilteredProperties(response.data);
+        setLoading(false);
       } catch (error) {
         console.error(error);
+        setLoading(false);
       }
     };
     getProperties();
@@ -97,6 +102,15 @@ const PropertyList = () => {
     setFilteredProperties(filtered);
   };
 
+  const renderSkeletons = (count: number) => (
+    Array.from({ length: count }, (_, index) => (
+      <div key={index} className="border rounded p-4">
+        <Skeleton height={200} />
+        <Skeleton count={3} />
+      </div>
+    ))
+  );
+
   return (
     <div>
       <h1 className="mb-4 text-2xl font-bold">All Properties</h1>
@@ -116,11 +130,17 @@ const PropertyList = () => {
           Pets Allowed
         </label>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {filteredProperties.map((property) => (
-          <PropertyItem key={property._id} property={property} />
-        ))}
-      </div>
+      {loading ? ( 
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {renderSkeletons(6)}
+        </div>
+      ) : (
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {filteredProperties.map((property) => (
+            <PropertyItem key={property._id} property={property} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
