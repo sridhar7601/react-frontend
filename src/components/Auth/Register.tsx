@@ -3,15 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { register as registerUser } from '../../services/api';
 
 const Register = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, setError } = useForm();
   const navigate = useNavigate();
 
   const onSubmit = async (data: any) => {
     try {
       await registerUser(data);
       navigate('/login');
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      if (error.response && error.response.data && error.response.data.message) {
+        setError('apiError', { message: error.response.data.message });
+      } else {
+        setError('apiError', { message: 'An unknown error occurred' });
+      }
     }
   };
 
@@ -75,6 +80,7 @@ const Register = () => {
           </select>
           {errors.userType && <p className="text-red-500">{errors.userType.message as string}</p>}
         </div>
+        {errors.apiError && <p className="text-red-500">{errors.apiError.message}</p>}
         <button type="submit" className="w-full py-2 bg-blue-500 rounded text-white">
           Register
         </button>
