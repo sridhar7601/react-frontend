@@ -29,3 +29,10 @@ A responsive app for viewing rentals
 ## Still Liking module alone hasn't been done in frontend but the backend was done 
 <img width="1392" alt="Screenshot 2024-05-20 at 8 37 30 AM" src="https://github.com/sridhar7601/react-frontend/assets/56919037/f4e54c75-d317-4bfb-bfb0-d1a3c431a0ec">
 But can test in the backend 
+
+## Deployed in Amazon Ec2 
+- http://34.204.63.196:5173/login
+
+## Docker pull on port 5173
+- docker pull sridzar007/react-frontend:latest
+
