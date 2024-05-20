@@ -1,0 +1,45 @@
+name: Deploy Node Application
+
+on: 
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Debug Docker Username
+        run: echo ${{ secrets.DOCKER_USERNAME }}
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract Git Commit SHA
+        id: get_sha
+        run: echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        run: docker build -t sridzar007/react-frontend:${{ env.sha }} -t sridzar007/react-frontend:latest .
+
+      - name: Publish image to Docker Hub with commit SHA tag
+        run: docker push sridzar007/react-frontend:${{ env.sha }}
+
+      - name: Publish image to Docker Hub with latest tag
+        run: docker push sridzar007/react-frontend:latest
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Stop & Remove Old Image
+        run: sudo docker stop frontend-app-container && sudo docker rm frontend-app-container
+      - name: Pull image from Docker Hub
+        run: sudo docker pull sridzar007/react-frontend:latest
+      - name: Run Docker container
+        run: sudo docker run -d -p 5173:80 --name frontend-app-container sridzar007/react-frontend:latest

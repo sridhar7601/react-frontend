@@ -1,24 +1,35 @@
+# Step 1: Build React App with Vite
 FROM node:alpine3.18 as build
 
-# # Declare build time environment variables
-# ARG REACT_APP_NODE_ENV
-# ARG REACT_APP_SERVER_BASE_URL
+# Set working directory
+WORKDIR /app 
 
-# # Set default values for environment variables
-# ENV REACT_APP_NODE_ENV=$REACT_APP_NODE_ENV
-# ENV REACT_APP_SERVER_BASE_URL=$REACT_APP_SERVER_BASE_URL
+# Copy package.json and package-lock.json (if available)
+COPY package.json package-lock.json ./
 
-# # Build App
-WORKDIR /app
-COPY package.json .
+# Install dependencies
 RUN npm install
+
+# Copy all files
 COPY . .
+
+# Build the app
 RUN npm run build
 
-# Serve with Nginx
+# Step 2: Serve with Nginx
 FROM nginx:1.23-alpine
-WORKDIR /usr/share/nginx/html
-RUN rm -rf *
-COPY --from=build /app/build .
+
+# Remove the default Nginx website
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy build output from Vite
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Copy custom Nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose port 80
 EXPOSE 80
-ENTRYPOINT [ "nginx", "-g", "daemon off;" ]
+
+# Start Nginx
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
