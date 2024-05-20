@@ -35,7 +35,7 @@ const PropertyList = () => {
 
   useEffect(() => {
     if (user.userType === 'seller') {
-      return navigate("https://react-frontend-e23w.vercel.app/my-properties")
+      return navigate("/my-properties")
     }
   }, [user.userType]);
 

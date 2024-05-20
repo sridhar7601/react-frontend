@@ -13,7 +13,7 @@ const MyProperties = () => {
   useEffect(() => {
     if (user.userType === 'buyer') {
       
-      return navigate("https://react-frontend-e23w.vercel.app/properties");
+      return navigate("/properties");
     }
   }, [user.userType]);
 

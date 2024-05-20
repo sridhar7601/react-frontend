@@ -9,7 +9,7 @@ const Register = () => {
   const onSubmit = async (data: any) => {
     try {
       await registerUser(data);
-      navigate('https://react-frontend-e23w.vercel.app/login');
+      navigate('/login');
     } catch (error) {
       console.error(error);
     }

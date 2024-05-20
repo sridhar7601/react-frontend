@@ -8,7 +8,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    navigate('https://react-frontend-e23w.vercel.app/login');
+    navigate('/login');
   };
 
   if (location.pathname === '/login' || location.pathname === '/register') {
