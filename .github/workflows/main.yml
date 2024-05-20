@@ -29,7 +29,7 @@ jobs:
         run: docker build -t sridzar007/react-frontend:${{ env.sha }} .
 
       - name: Publish image to Docker Hub
-        run: docker push sridzar007/react-frontend:${{ env.sha }}
+        run: docker push sridzar007/react-frontend:latest
   deploy:
     needs: build
     runs-on: self-hosted
