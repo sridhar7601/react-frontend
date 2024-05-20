@@ -1,24 +1,17 @@
-FROM node:alpine3.18 as build
+# Use the official Nginx image from the Docker Hub
+FROM nginx:alpine
 
-# Declare build time environment variables
-ARG REACT_APP_NODE_ENV
-ARG REACT_APP_SERVER_BASE_URL
+# Remove the default Nginx website
+RUN rm -rf /usr/share/nginx/html/*
 
-# Set default values for environment variables
-ENV REACT_APP_NODE_ENV=$REACT_APP_NODE_ENV
-ENV REACT_APP_SERVER_BASE_URL=$REACT_APP_SERVER_BASE_URL
+# Copy the build output from the dist directory to the Nginx html directory
+COPY ./dist /usr/share/nginx/html
 
-# Build App
-WORKDIR /app
-COPY package.json .
-RUN npm install
-COPY . .
-RUN npm run build
+# Copy a custom Nginx configuration file
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
-# Serve with Nginx
-FROM nginx:1.23-alpine
-WORKDIR /usr/share/nginx/html
-RUN rm -rf *
-COPY --from=build /app/build .
+# Expose port 80
 EXPOSE 80
-ENTRYPOINT [ "nginx", "-g", "daemon off;" ]
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
