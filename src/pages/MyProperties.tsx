@@ -14,7 +14,7 @@ const MyProperties = () => {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   useEffect(() => {
-    if (user.userType === 'buyer') {
+    if (user.userType === 'buyer'||{}) {
       navigate("/properties");
     }
   }, [user.userType, navigate]);

@@ -22,7 +22,7 @@ const PropertyForm = ({ property, onSubmit }: { property?: any, onSubmit: () => 
   const navigate = useNavigate();
   
   useEffect(() => {
-    if (user.userType === 'buyer') {
+    if (user.userType === 'buyer'||{}) {
       return navigate("/properties");
     }
   }, [user.userType]);
