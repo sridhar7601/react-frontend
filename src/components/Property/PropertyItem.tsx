@@ -1,37 +1,23 @@
 import { useState } from 'react';
-// import axios from 'axios';
 import { updateLikeCount } from '../../services/api';
-// import io from 'socket.io-client';
-
-// const socket = io('http://localhost:5050');
 
 const PropertyItem = ({ property, onEdit, onDelete, showButtons }: { property: any; onEdit?: (property: any) => void; onDelete?: (id: string) => void; showButtons?: boolean }) => {
   const [showEmail, setShowEmail] = useState(false);
-  const [likes, setLikes] = useState(property.likes || 0);
+  // const [likes, setLikes] = useState(likes | 0);
+  
   const toggleEmail = () => {
     setShowEmail((prev) => !prev);
   };
-  // useEffect(() => {
-  //   // Listen for updates to likes
-  //   socket.on('updateLikes', (data) => {
-  //     if (data.propertyId === property._id) {
-  //       setLikes(data.likes);
-  //     }
-  //   });
 
-  //   return () => {
-  //     socket.off('updateLikes');
-  //   };
-  // }, [property._id]);
   const handleLike = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await updateLikeCount(property._id, true, token || undefined);
-      setLikes(response.data.likes);
+      await updateLikeCount(property._id, true, token || undefined);
     } catch (error) {
       console.error('Error liking property:', error);
     }
   };
+  
 
   return (
     <div className="p-4 bg-white rounded shadow-md">
@@ -58,7 +44,7 @@ const PropertyItem = ({ property, onEdit, onDelete, showButtons }: { property: a
         <button onClick={handleLike} className="text-blue-500">
           Like &nbsp;
         </button>}
-        <span>{likes} Likes</span>
+        <span>{property.likes} Likes</span>
       </div>
 
       {showButtons && (

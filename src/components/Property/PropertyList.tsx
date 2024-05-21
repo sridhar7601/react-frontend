@@ -4,7 +4,7 @@ import PropertyItem from './PropertyItem';
 import { useNavigate } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-
+import {io } from "socket.io-client";
 interface Property {
   _id: string;
   state: string;
@@ -15,6 +15,7 @@ interface Property {
   furnished: boolean;
   petsAllowed: boolean;
   cost: number;
+  likes: number;
 }
 
 const PropertyList = () => {
@@ -35,6 +36,25 @@ const PropertyList = () => {
   const [loading, setLoading] = useState(true);
 
   const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+  useEffect(()=>{
+    const socket = io("http://34.204.63.196:4040");
+  
+    socket.on("connect", () => {
+  
+  
+      socket.on("like", (data:any) => { 
+        console.log("fghjklkvhjkmnb n",filteredProperties,properties) 
+
+let temp = [...filteredProperties];
+let index = temp.findIndex((item) => item._id === data.property);
+temp[index]["likes"] = data["likes"] || 0;
+setFilteredProperties(temp) 
+
+      //  setLikes(data.'likes)
+      });
+    })
+  },[filteredProperties])
 
   useEffect(() => {
     if (user.userType === 'seller') {
