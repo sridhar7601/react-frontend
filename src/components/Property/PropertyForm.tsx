@@ -25,6 +25,9 @@ const PropertyForm = ({ property, onSubmit }: { property?: any, onSubmit: () => 
     if (user.userType === 'buyer') {
       return navigate("/properties");
     }
+    if(!user.userType){
+      return navigate ("/login")
+    }
   }, [user.userType]);
 
   useEffect(() => {
