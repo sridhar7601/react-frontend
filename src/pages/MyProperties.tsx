@@ -17,6 +17,9 @@ const MyProperties = () => {
     if (user.userType === 'buyer') {
       navigate("/properties");
     }
+    if(!user.userType){
+      return navigate ("/login")
+    }
   }, [user.userType, navigate]);
 
   useEffect(() => {
