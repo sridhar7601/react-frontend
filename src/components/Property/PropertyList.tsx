@@ -60,6 +60,9 @@ setFilteredProperties(temp)
     if (user.userType === 'seller') {
       navigate("/my-properties");
     }
+    if(!user.userType){
+      return navigate ("/login")
+    }
   }, [user.userType, navigate]);
 
   useEffect(() => {
