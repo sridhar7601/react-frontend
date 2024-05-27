@@ -37,8 +37,7 @@ jobs:
     needs: build
     runs-on: self-hosted
     steps:
-      - name: Stop & Remove Old Image
-        run: sudo docker stop frontend-app-container && sudo docker rm frontend-app-container
+     
       - name: Pull image from Docker Hub
         run: sudo docker pull sridzar007/react-frontend:latest
       - name: Run Docker container
